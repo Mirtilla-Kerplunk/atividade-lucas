@@ -1,9 +1,8 @@
 const http = require('http');
 const fs = require('fs');
-const path = require('path'); // Se eu n usasse isso não ia ter jeito de rodar, pq por algum motivo sobrecarregava o servidor e crashava
 
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 3001;
 
 const server = http.createServer((req, res) => {
 
@@ -21,12 +20,14 @@ const server = http.createServer((req, res) => {
         fileName = 'pagina-4.html';
     } else if (req.url === '/pagina-5') {
         fileName = 'pagina-5.html';
-    } if (!fileName) {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    return res.end('Rota não encontrada');
-}
+    }
 
-    const filePath = path.join(__dirname, fileName);
+    if (!fileName) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        return res.end('Rota não encontrada');
+    }
+
+    const filePath = __dirname + '/' + fileName;
 
     fs.readFile(filePath, (err, data) => {
         if (err) {
@@ -39,4 +40,6 @@ const server = http.createServer((req, res) => {
     });
 });
 
-server.listen(port, hostname, () => { console.log(`Servidor rodando em http://${hostname}:${port}/`); });
+server.listen(port, hostname, () => {
+    console.log(`Servidor rodando em http://${hostname}:${port}/`);
+});
